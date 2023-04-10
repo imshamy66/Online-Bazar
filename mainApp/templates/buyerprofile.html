@@ -1,0 +1,182 @@
+{% extends "index.html" %}
+{% load static %}
+{% load product %}
+
+{% block title %}
+    <title> Online Bazar | Buyer Profile </title>
+{% endblock %}
+{% block body  %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            {% if User.pic %}
+            <img src="{{User.pic.url}}" class="w-100"></img>
+            {% else %}
+            <img src="{% static 'image/noimage.png' %}" class="w-100 mb-4"></img>
+            {% endif %}
+        </div> 
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <h5 class="bg-success text-light p-2 text-center">Buyer Profile Section</h5>
+            <table class="table table-light table-striped table-hover">
+                <tr>
+                    <th>Name</th>
+                    <td>{{User.name}}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{User.phone}}</td>
+                </tr>
+                <tr>
+                    <th>Email Id</th>
+                    <td>{{User.email}}</td>
+                </tr>
+                <tr>
+                    <th>Street Number</th>
+                    <td>{{User.addressline1}}</td>
+                </tr>
+                <tr>
+                    <th>Locality</th>
+                    <td>{{User.addressline2}}</td>
+                </tr>
+                <tr>
+                    <th>Pin Code</th>
+                    <td>{{User.pincode}}</td>
+                </tr><tr>
+                    <th>City</th>
+                    <td>{{User.city}}</td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td>{{User.state}}</td>
+                </tr>
+                <tr>
+                    <th colspan="2"><a href='/updateprofile/' class='btn bg-success text-light w-100'>Update Profile</a></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<h4 class="bg-success text-light text-center w-100 mt-3 mb-3 p-3">Wishlist Section</h4>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-light">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Base Prize</th>
+            <th>Discount Prize</th>
+            <th>Final Prize</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for i in Wishlist %}
+        <tr>
+            {% if i.product.pic1 %}
+            <td ><img src="{{i.product.pic1.url}}" width="100px" height="100px"></img></td>
+            {% else %}
+            <td ><img src="{% static 'image/noimage.png' %}" width="100px" height="100px"></img></td>
+            {% endif %}
+            <td>{{i.product.name}}</td>
+            <td>{{i.product.size}}</td>
+            <td>{{i.product.color}}</td>
+            <td>&#8377;{{i.product.baseprice}}</td>
+            <td>{{i.product.discount}} %</td>
+            <td>&#8377;{{i.product.finalprice}}</td>
+            <td>{{i.product.stock}}</td>
+            <td><a href="/single-product/{{i.product.id}}/"><i class="material-icons text-success btn">shopping_cart</i></a></td>
+            <td><button class="btn " onclick="fun('{{i.id}}')"><i class="material-icons text-success">delete_forever</i></button></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<h4 class="bg-success p-3 w-100 mt-3 mb-3 text-center text-light">Order History Section</h4>
+{% for i in Orders  %}
+    <div class="row" style="border-bottom:5px solid gray">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            <table class="table table-light table-striped table-hover">
+                <tr>
+                    <th>Order Id</th>
+                    <td>{{i.id}}</td>
+                </tr>
+                <tr>
+                    <th>Mode</th>
+                    <td>{{i.mode}}</td>
+                </tr>
+                <tr>
+                    <th>Order Status</th>
+                    {% if i.orderstatus == 0 %}
+                    <td>Cancel</td>
+                    {% elif i.orderstatus == 1 %}
+                    <td>Not Packed</td>
+                    {% elif i.orderstatus == 2 %}
+                    <td>Packed</td>
+                    {% elif i.orderstatus == 3 %}
+                    <td>Out For Delivery</td>
+                    {% elif i.orderstatus == 4 %}
+                    <td>Deliverd</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Payment Status</th>
+                    {% if i.paymentstatus == 1 %}
+                    <td>Pending</td>
+                    <a class="btn btn-primary m-2 p-2 mt-1 mb-1" href="/paynow/{{i.id}}/">Pay Now</a>
+                    {% else %}
+                    <td>Done</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Shipping</th>
+                    <td>&#8377;{{i.shopping}}</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>&#8377;{{i.total}}</td>
+                </tr>
+                <tr>
+                    <th>Final</th>
+                    <td>&#8377;{{i.final}}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{i.date}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+            <table class="table table-light table-striped table-hover">
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>Qantity</th>
+                    <th>Total</th>
+                </tr>
+            {% for i in request|orderItems:i.id  %}
+            <tr>
+                <td><img src="{{i.pic}}" height="100px" width="100px"></td>
+                <td>{{i.name}}</td>
+                <td>{{i.size}}</td>
+                <td>{{i.color}}</td>
+                <td>{{i.price}}</td>
+                <td>{{i.qty}}</td>
+                <td>&#8377;{{i.total}}</td>
+            </tr>
+            {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endfor %}
+<script>
+    function fun(num){
+        if(confirm("Are you Sure !!! You want to delete This Item")){
+            window.open(`/delete-wishlist/${num}/`)
+        }
+    }
+</script>
+{% endblock  %}

@@ -1,0 +1,118 @@
+{% extends "index.html" %}
+{% load static %}
+{% load cart %}
+
+{% block title %}
+    <title> Online Bazar | Cart Page </title>
+{% endblock %}
+{% block body  %}
+<div class="row">
+    <div class="col-md-6 col-sm-12 col-12">
+        <h5 class="bg-success text-light p-2 text-center">Billing Details</h5>
+        <table class="table table-light table-striped table-hover">
+            <tr>
+                <th>Name</th>
+                <td>{{Buyer.name}}</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{Buyer.phone}}</td>
+            </tr>
+            <tr>
+                <th>Email Id</th>
+                <td>{{Buyer.email}}</td>
+            </tr>
+            <tr>
+                <th>Street Number</th>
+                <td>{{Buyer.addressline1}}</td>
+            </tr>
+            <tr>
+                <th>Locality</th>
+                <td>{{Buyer.addressline2}}</td>
+            </tr>
+            <tr>
+                <th>Pin Code</th>
+                <td>{{Buyer.pincode}}</td>
+            </tr><tr>
+                <th>City</th>
+                <td>{{Buyer.city}}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{Buyer.state}}</td>
+            </tr>
+            <tr>
+                <th colspan="2"><a href='/updateprofile/' class='btn bg-success text-light w-100'>Update Profile</a></th>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6 col-sm-12 col-12">
+        <h5 class="bg-success text-light p-2 text-center">Cart Section</h5>
+        {% if Cart %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-light">
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+                {% for i in Cart %}
+                <tr>
+                    {% if request|cartProductImage:i %}
+                    <td ><img src="{{request| cartProductImage:i}}" width="100px" height="100px"></img></td>
+                    {% else %}
+                    <td ><img src="{% static 'image/noimage.png' %}" width="100px" height="100px"></img></td>
+                    {% endif %}
+                    <td>{{request|cartProductName:i}}</td>
+                    <td>{{request|cartSize:i}}</td>
+                    <td>{{request|cartColor:i}}</td>
+                    <td>&#8377;{{request|cartProductPrice:i}}</td>
+                    <td>{{request|cartQnty:i}}</td>
+                    <td>&#8377;{{request|cartTotal:i}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="form-control text-center">
+            <h2><span>No Item</span></h2>
+            <h4><span> Please Select Item</span></h4>
+            <a href="/shop/All/All/All/" class="btn text-primary">click here</a>
+        </div>
+        {% endif %}
+        <table class="table table-hover table-striped table-light">
+            <tr>
+                <th>Total</th>
+                <td>&#8377;{{Total}}</td>
+            </tr>
+            <tr>
+                <th>Shopping</th>
+                <td>&#8377;{{Shopping}}</td>
+            </tr>
+            <tr>
+                <th>Final</th>
+                <td>&#8377;{{Final}}</td>
+            </tr>
+            <form action="" method="post">
+                {% csrf_token %}
+                <tr>
+                    <th>Mode of Payment</th> 
+                    <td>
+                        <select name="mode" class="form-control">
+                            <option value="cod">Cash on Delivery</option>
+                            <option value="online">Net Banking/UPI/Card/Wallet</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2"><button type="submit" class="btn text-light bg-success w-100 mt-3 mb-3">Place Order</button></th>
+                </tr>
+            </form>
+        </table>
+    </div>
+</div>
+{% endblock  %}

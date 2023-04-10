@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title> Online Bazar | Login </title>
+{% endblock %}
+
+{% block body  %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <img src="{% static 'image/login.png' %}" class="w-100"></img>
+        </div> 
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <h5 class="bg-success text-light p-2 text-center">Login Section</h5>
+            {% for i in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ i }}
+              </div>
+            {% endfor %}
+            <form action="" method='POST'>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">User Name</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter User Name">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="lpassword" placeholder="Enter Password">
+                </div>
+                    <button type="submit" class="btn btn-primary bg-success w-100">Login</button>
+                    <div class="d-flex justify-content-between">
+                        <a href="/signup/" style="text-decoration: None; ">New User ? Create Account </a>
+                        <a href="/forget-username/" style="text-decoration: None; ">Forget Password</a>
+                    </div>
+              </form>
+        </div>
+    </div>
+</div>
+{% endblock  %}

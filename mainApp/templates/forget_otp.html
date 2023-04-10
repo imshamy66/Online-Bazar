@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title> Online Bazar | Forget Username </title>
+{% endblock %}
+
+{% block body  %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <img src="{% static 'image/forget.jpg' %}" class="w-100"></img>
+        </div> 
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <h5 class="bg-success text-light p-2 text-center">Forget Password</h5>
+            {% for i in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ i }}
+              </div>
+            {% endfor %}
+            <form action="" method='POST'>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="otp" class="form-label">OTP</label>
+                    <input type="text" class="form-control" name="otp" placeholder="Enter OTP  Which is Send on Your Registered Email">
+                </div>
+                <button type="submit" class="btn btn-primary bg-success w-100">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock  %}
